@@ -29,8 +29,8 @@ class Cancion(models.Model):
         return self.nombre
 
 class Puntuacion(models.Model):
-    id_cancion = models.ForeignKey(Cancion, verbose_name="Id Canción", on_delete=models.CASCADE)
-    id_usuario = models.ForeignKey(Usuario, verbose_name="Id Usuario", on_delete=models.CASCADE)
+    cancion = models.ForeignKey(Cancion, verbose_name="Canción", on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, verbose_name="Usuario", on_delete=models.CASCADE)
     valoracion = models.IntegerField(verbose_name="Valoración")
 
     def __str__(self):

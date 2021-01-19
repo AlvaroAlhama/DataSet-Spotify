@@ -4,5 +4,7 @@ from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.populateDB),
+    path('', views.inicio),
+    path('populate/', views.populateDB),
+    path('loadrs/', views.loadRS),
     ]

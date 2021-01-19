@@ -103,7 +103,7 @@ def populatePuntuacion(c):
             valoracion = random.randrange(0,100)
             id_cancion = random.randrange(1, num_canciones)
             if id_cancion not in lista_canciones:
-                lista.append(Puntuacion(id_cancion=c[id_cancion] , id_usuario=usuario, valoracion=valoracion))
+                lista.append(Puntuacion(cancion=c[id_cancion] , usuario=usuario, valoracion=valoracion))
                 lista_canciones.append(id_cancion)
     Puntuacion.objects.bulk_create(lista)
     print("Puntuaciones añadidas: " + str(Puntuacion.objects.count()))

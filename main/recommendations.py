@@ -1,6 +1,22 @@
 #encoding:utf-8
-
+from main.models import *
 from math import sqrt
+import shelve
+
+def loadDict():
+    Prefs={}   # matriz de usuarios y puntuaciones a cada a items
+    shelf = shelve.open("dataRS.dat")
+    puntuaciones = Puntuacion.objects.all()
+    for p in puntuaciones:
+        usuario = int(p.usuario.id)
+        cancion = int(p.cancion.id)
+        valoracion = float(p.valoracion)
+        Prefs.setdefault(usuario, {})
+        Prefs[usuario][cancion] = valoracion
+    shelf['Prefs']=Prefs
+    shelf['ItemsPrefs']=transformPrefs(Prefs)
+    shelf['SimItems']=calculateSimilarItems(Prefs, n=10)
+    shelf.close()
 
 # Returns a distance-based similarity score for person1 and person2
 def sim_distance(prefs, person1, person2):
