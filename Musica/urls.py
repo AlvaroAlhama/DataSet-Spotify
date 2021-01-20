@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.inicio),
     path('populate/', views.populateDB),
     path('loadrs/', views.loadRS),
+    path('prueba/', views.pruebaWoosh),
     ]

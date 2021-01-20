@@ -8,6 +8,8 @@ import urllib.request
 import lxml
 from datetime import datetime
 import csv
+from whoosh.index import open_dir
+from whoosh.qparser import QueryParser
 
 
 def populateDB(request):
@@ -21,3 +23,10 @@ def loadRS(request):
 def inicio(request):
     return render(request, 'inicio.html', {})
 
+def pruebaWoosh(request):
+    ix=open_dir('./Index')      
+    with ix.searcher() as searcher:
+        query = QueryParser("artista", ix.schema).parse('m.o.v.e')
+        results = searcher.search(query)
+        print(results[0]['albumnes'])
+    return render(request, 'inicio.html', {})

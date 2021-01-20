@@ -1,6 +1,14 @@
 from main.models import *
 import csv
 import random 
+from whoosh.index import create_in,open_dir
+from whoosh.fields import Schema, TEXT, KEYWORD
+from whoosh.qparser import QueryParser, MultifieldParser, OrGroup
+from bs4 import BeautifulSoup
+import requests
+import urllib
+from urllib.request import urlopen
+import os
 
 def deleteTables():  
     Puntuacion.objects.all().delete()
@@ -108,14 +116,58 @@ def populatePuntuacion(c):
     Puntuacion.objects.bulk_create(lista)
     print("Puntuaciones añadidas: " + str(Puntuacion.objects.count()))
     print("---------------------------------------------------------")
+
+def populateWhoosh():
+    print("Cargando info artista...")
+
+    if not os.path.exists('./Index'):
+        os.mkdir('./Index')
+
+    schema = Schema(artista=TEXT(stored=True), url_wiki=TEXT(stored=True), 
+                    url_oficial=TEXT(stored=True), url_twitter=TEXT(stored=True),
+                    url_instagram=TEXT(stored=True), albumnes=KEYWORD(stored=True, commas=True))
+
+    ix = create_in('./Index', schema=schema)
+    writer = ix.writer()
+
+    artistas = Artista.objects.all()
+    for artista in artistas:
+        soup = BeautifulSoup(urlopen('https://musicbrainz.org/search?query=' + urllib.parse.quote(artista.nombre) + '&type=artist'), 'lxml')
+        s = BeautifulSoup(urlopen('https://musicbrainz.org' + soup.find('table').find('tbody').find('tr').find('td').find('a')['href']), 'lxml')
+        nombre_albumnes = []
+        url_oficial = None
+        url_wiki = None
+        url_twitter = None
+        url_instagram = None
+        albumnes = s.findAll('table')[0].find('tbody').findAll('tr')
+        for album in albumnes:
+            aux = album.findAll('td')
+            nombre_album = aux[1].find('bdi').string + ' - ' + aux[0].string
+            nombre_albumnes.append(nombre_album)
+        links_externos = s.find('div', id='sidebar').find('ul', class_='external_links')
+        if links_externos.find('li', class_='home-favicon'):
+            url_oficial = links_externos.find('li', class_='home-favicon').find('a')['href']
+        if links_externos.find('li', class_='wikipedia-favicon'):
+            url_wiki = links_externos.find('li', class_='wikipedia-favicon').find('a')['href']
+        if links_externos.find('li', class_='twitter-favicon'):
+            url_twitter = links_externos.find('li', class_='twitter-favicon').find('a')['href']
+        if links_externos.find('li', class_='instagram-favicon'):
+            url_instagram = links_externos.find('li', class_='instagram-favicon').find('a')['href']
+
+        writer.add_document(artista=artista.nombre, url_wiki=url_wiki, url_oficial=url_oficial, 
+        url_twitter=url_twitter, url_instagram=url_instagram, albumnes=nombre_albumnes)
+        break
+
+    writer.commit()
     
     
 def populateDatabase():
-    deleteTables()
+    '''deleteTables()
     populateArtista()
     c = populateCancion()
     populateUsuario()
-    populatePuntuacion(c)
+    populatePuntuacion(c)'''
+    populateWhoosh()
     print("Finished database population")
     
 if __name__ == '__main__':
