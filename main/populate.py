@@ -20,6 +20,7 @@ def populateArtista():
     print("Cargando artistas...")
         
     lista=[]
+    lista_string=[]
     with open('data2.csv', newline='', encoding='utf8') as File:
         reader = csv.reader(File)
         contador = 0
@@ -27,8 +28,9 @@ def populateArtista():
             if(contador != 0):
                 artistas = row[3].replace("[","").replace("]","").replace("'","").split(", ")
                 for a in artistas:
-                    if Artista(nombre=a) not in lista:
+                    if a not in lista_string:
                         lista.append(Artista(nombre=a))
+                        lista_string.append(a)
                 
             contador = contador + 1
 
@@ -132,31 +134,38 @@ def populateWhoosh():
 
     artistas = Artista.objects.all()
     for artista in artistas:
-        soup = BeautifulSoup(urlopen('https://musicbrainz.org/search?query=' + urllib.parse.quote(artista.nombre) + '&type=artist'), 'lxml')
-        s = BeautifulSoup(urlopen('https://musicbrainz.org' + soup.find('table').find('tbody').find('tr').find('td').find('a')['href']), 'lxml')
         nombre_albumnes = []
         url_oficial = None
         url_wiki = None
         url_twitter = None
         url_instagram = None
-        albumnes = s.findAll('table')[0].find('tbody').findAll('tr')
-        for album in albumnes:
-            aux = album.findAll('td')
-            nombre_album = aux[1].find('bdi').string + ' - ' + aux[0].string
-            nombre_albumnes.append(nombre_album)
-        links_externos = s.find('div', id='sidebar').find('ul', class_='external_links')
-        if links_externos.find('li', class_='home-favicon'):
-            url_oficial = links_externos.find('li', class_='home-favicon').find('a')['href']
-        if links_externos.find('li', class_='wikipedia-favicon'):
-            url_wiki = links_externos.find('li', class_='wikipedia-favicon').find('a')['href']
-        if links_externos.find('li', class_='twitter-favicon'):
-            url_twitter = links_externos.find('li', class_='twitter-favicon').find('a')['href']
-        if links_externos.find('li', class_='instagram-favicon'):
-            url_instagram = links_externos.find('li', class_='instagram-favicon').find('a')['href']
+        soup = BeautifulSoup(urlopen('https://musicbrainz.org/search?query=' + urllib.parse.quote(artista.nombre) + '&type=artist'), 'lxml')
+        if soup.find('div', id='content').findAll('p')[1].string != 'No results found. Try refining your search query.':
+            s = BeautifulSoup(urlopen('https://musicbrainz.org' + soup.find('table').find('tbody').find('tr').find('td').find('a')['href']), 'lxml')
+            lleno = True
+            for p in s.find('div', id='content').findAll('p'):
+                if p.string == "This artist does not have any release groups or standalone recordings.":
+                    lleno = False
+                    break
+            if lleno:
+                albumnes = s.findAll('table')[0].find('tbody').findAll('tr')
+                for album in albumnes:
+                    aux = album.findAll('td')
+                    nombre_album = aux[1].find('bdi').string + ' - ' + aux[0].string
+                    nombre_albumnes.append(nombre_album)
+            links_externos = s.find('div', id='sidebar').find('ul', class_='external_links')
+            if links_externos != None:
+                if links_externos.find('li', class_='home-favicon'):
+                    url_oficial = links_externos.find('li', class_='home-favicon').find('a')['href']
+                if links_externos.find('li', class_='wikipedia-favicon'):
+                    url_wiki = links_externos.find('li', class_='wikipedia-favicon').find('a')['href']
+                if links_externos.find('li', class_='twitter-favicon'):
+                    url_twitter = links_externos.find('li', class_='twitter-favicon').find('a')['href']
+                if links_externos.find('li', class_='instagram-favicon'):
+                    url_instagram = links_externos.find('li', class_='instagram-favicon').find('a')['href']
 
         writer.add_document(artista=artista.nombre, url_wiki=url_wiki, url_oficial=url_oficial, 
         url_twitter=url_twitter, url_instagram=url_instagram, albumnes=nombre_albumnes)
-        break
 
     writer.commit()
     

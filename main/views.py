@@ -28,5 +28,4 @@ def pruebaWoosh(request):
     with ix.searcher() as searcher:
         query = QueryParser("artista", ix.schema).parse('m.o.v.e')
         results = searcher.search(query)
-        print(results[0]['albumnes'])
     return render(request, 'inicio.html', {})
