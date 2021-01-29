@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Canciones Recomendadas para Usuario: {{idUsuario}} </h1>
+{% endblock %}
+
+  {% block contenido %}
+
+		{% if formulario %}
+			<form id="formulario" method="post" action=''>{% csrf_token %}
+				{{formulario}}
+				<input type='submit' value='Realizar Busqueda'/>
+			</form>
+			<br/>
+		{% endif %}
+
+		{% if items %}
+			{% for cancion, scores in items %}
+			
+			    <dt><b>Nombre: </b>{{cancion.nombre}} <b>Puntuación de Recomendación: </b>{{scores | floatformat:"2"}}</dt>
+			    <dd><b>Año: </b>{{cancion.año}}</dd>
+				<dd><b>Duración: </b>{{cancion.duracion | floatformat:"0"}} minutos</dd>
+				<dd><b>Escuchar en Spotify: </b><a href="https://open.spotify.com/track/{{cancion.id_spotify}}" target="_blank">Ir a Spotify</a></dd>
+				<dt> <b>Artistas: </b>
+			    {% for artista in cancion.artistas.all %}
+			    	<dd><a href="/artista/{{artista.nombre}}">{{artista.nombre}}</a></dd> 
+			    {% endfor %}
+				</dt>	
+				<br/>	    
+			{% endfor %}
+		{% endif %}
+  {% endblock %}

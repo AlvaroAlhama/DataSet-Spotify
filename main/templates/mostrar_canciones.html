@@ -1,0 +1,39 @@
+
+
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Canciones del 1999 al 2020 </h1>
+{% endblock %}
+
+  {% block contenido %}
+
+		{% if mensaje %}
+			{{mensaje}}
+			<br/>
+		{% endif %}
+
+		{% if formulario %}
+			<form id="formulario" method="post" action=''>{% csrf_token %}
+				{{formulario}}
+				<input type='submit' value='Realizar Busqueda'/>
+			</form>
+			<br/>
+		{% endif %}
+
+		{% if canciones %}
+			{% for row in canciones %}
+			
+			    <dt><b>Nombre: </b>{{row.nombre}}</dt>
+			    <dd><b>Año: </b>{{row.año}}</dd>
+				<dd><b>Duración: </b>{{row.duracion | floatformat:"0"}} minutos</dd>
+				<dd><b>Escuchar en Spotify: </b><a href="https://open.spotify.com/track/{{row.id_spotify}}" target="_blank">Ir a Spotify</a></dd>
+				<dt> <b>Artistas: </b>
+			    {% for artista in row.artistas.all %}
+			    	<dd><a href="/artista/{{artista.nombre}}">{{artista.nombre}}</a></dd> 
+			    {% endfor %}
+				</dt>	
+				<br/>	    
+			{% endfor %}
+		{% endif %}
+  {% endblock %}

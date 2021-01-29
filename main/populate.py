@@ -21,7 +21,7 @@ def populateArtista():
         
     lista=[]
     lista_string=[]
-    with open('data2.csv', newline='', encoding='utf8') as File:
+    with open('data.csv', newline='', encoding='utf8') as File:
         reader = csv.reader(File)
         contador = 0
         for row in reader:
@@ -46,7 +46,7 @@ def populateCancion():
     lista_canciones=[]
     lista_artista={}
     diccionario_canciones = {}
-    with open('data2.csv', newline='', encoding='utf8') as File:
+    with open('data.csv', newline='', encoding='utf8') as File:
         reader = csv.reader(File)
         for row in reader:
             if(contador != 0):
@@ -168,14 +168,17 @@ def populateWhoosh():
         url_twitter=url_twitter, url_instagram=url_instagram, albumnes=nombre_albumnes)
 
     writer.commit()
+
+    print("Se ha populado correctamente Whoosh")
+    print("---------------------------------------------------------")
     
     
 def populateDatabase():
-    '''deleteTables()
+    deleteTables()
     populateArtista()
     c = populateCancion()
     populateUsuario()
-    populatePuntuacion(c)'''
+    populatePuntuacion(c)
     populateWhoosh()
     print("Finished database population")
     

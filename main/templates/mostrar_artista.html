@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Artista: {{artista.nombre}} </h1>
+{% endblock %}
+
+  {% block contenido %}
+
+	{% if mensaje %}
+		{{mensaje}}
+	{% endif %}
+
+	{% if artista.albumnes%}			
+		<dt><b>Álbumnes: </b></dt>
+		<ul>
+		{% for row in artista.albumnes %}
+			<li type="circle">{{row}}</li> 	
+		{% endfor %}
+		</ul>
+		<br/>
+	{% endif %}    
+		
+	{% if artista.url_oficial%}			
+		<dt><b>Página Web Oficial: </b><a href="{{artista.url_oficial}}" target="_blank">Ir a Sitio</a></dt>
+		<br/>
+	{% endif %} 
+
+	{% if artista.url_wiki%}			
+		<dt><b>Wikipedia: </b><a href="{{artista.url_wiki}}" target="_blank">Ir a Sitio</a></dt>
+		<br/>
+	{% endif %} 
+
+	{% if artista.url_twitter%}			
+		<dt><b>Twitter: </b><a href="{{artista.url_twitter}}" target="_blank">Ir a Sitio</a></dt>
+		<br/>
+	{% endif %} 
+
+	{% if artista.url_instagram%}			
+		<dt><b>Instagram: </b><a href="{{artista.url_instagram}}" target="_blank">Ir a Sitio</a></dt>
+		<br/>
+	{% endif %} 
+
+  {% endblock %}
