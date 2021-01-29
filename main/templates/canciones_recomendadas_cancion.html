@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 
-{% block encabezado %}
-<h1> Canciones Recomendadas: {{cancion}} </h1>
-{% endblock %}
-
   {% block contenido %}
-
+  <h1> Canciones Recomendadas: {{cancion}} </h1>
 		{% if formulario %}
 			<form id="formulario" method="post" action=''>{% csrf_token %}
 				{{formulario}}
@@ -23,10 +19,10 @@
 				<dd><b>Escuchar en Spotify: </b><a href="https://open.spotify.com/track/{{cancion.id_spotify}}" target="_blank">Ir a Spotify</a></dd>
 				<dt> <b>Artistas: </b>
 			    {% for artista in cancion.artistas.all %}
-			    	<dd><a href="/artista/{{artista.nombre}}">{{artista.nombre}}</a></dd> 
+			    	<dd class="col-sm-3"><a href="/artista/{{artista.nombre}}">{{artista.nombre}}</a></dd> 
 			    {% endfor %}
 				</dt>	
-				<br/>	    
+				<hr class="mt-2 mb-3"/>  	    
 			{% endfor %}
 		{% endif %}
   {% endblock %}

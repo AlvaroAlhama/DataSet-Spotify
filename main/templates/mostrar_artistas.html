@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 
-{% block encabezado %}
-<h1> Artistas del 1999 al 2020 </h1>
-{% endblock %}
-
   {% block contenido %}
-
+  <h1> Artistas del 1999 al 2020 </h1>
 		{% if mensaje %}
 			{{mensaje}}
 			<br/>
@@ -24,8 +20,8 @@
 			{% for row in artistas %}
 			
 			    <dt><b>Nombre: </b>{{row.nombre}}</dt>
-			    <dd><a href="/artista/{{row.nombre}}">Más información</a></dd> 
-				<br/>	    
+			    <dd class="col-sm-3"><a href="/artista/{{row.nombre}}">Más información</a></dd> 
+				<hr class="mt-2 mb-3"/>	    
 			{% endfor %}
 
 		{% endif %}

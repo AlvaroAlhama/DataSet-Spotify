@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 
-{% block encabezado %}
-<h1> Artista: {{artista.nombre}} </h1>
-{% endblock %}
-
   {% block contenido %}
-
+  <h1> Artista: {{artista.nombre}} </h1>
 	{% if mensaje %}
 		{{mensaje}}
 	{% endif %}

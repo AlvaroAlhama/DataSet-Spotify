@@ -5,27 +5,69 @@
   <style>
    {% block style_css %}{% endblock %}
   </style>
+  {% load bootstrap4 %}
+  {% bootstrap_css %}
 </head>
 <body>
   <header> 
   	{% block encabezado %}{% endblock %}
 
- 			<dd><a href='/'>Inicio</a></dd>
-			<dd><a href='/loadrs'>Carga de RS</a></dd>
-      <dd><a href='/populate'>Cargar la BD</a></dd>
-      <dd><a href='/mostrarcanciones'>Mostrar Todas las Canciones</a></dd>
-      <dd><a href='/mostrarartistas'>Mostrar Todos los Artistas</a></dd>
-      <dd><a href='/mostrarexplicito'>Mostrar Canciones Explícitas</a></dd>
-      <dd><a href='/mostrarpopulares'>Mostrar las Canciones Más Populares por Año</a></dd>
-      <dd><a href='/busquedacancion'>Buscar Canción</a></dd>
-      <dd><a href='/busquedaartista'>Buscar Artista</a></dd>
-      <dd><a href='/recomendarcancionusuario'>Recomendar Canción por ID Usuario</a></dd>
-      <dd><a href='/recomendarcancion'>Recomendar Canciones Similares</a></dd>
-	<hr>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Spotify 99/21</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Carga
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/loadrs">Carga RS</a>
+            <a class="dropdown-item" href="/populate">Carga BD</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Mostrar
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/mostrarcanciones">Mostrar Todas las Canciones</a>
+            <a class="dropdown-item" href="/mostrarartistas">Mostrar Todos los Artistas</a>
+            <a class="dropdown-item" href="/mostrarexplicito">Mostrar Canciones Explícitas</a>
+            <a class="dropdown-item" href="/mostrarpopulares">Mostrar las Canciones Más Populares por Año</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Buscar
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/busquedacancion">Buscar Canción</a>
+            <a class="dropdown-item" href="/busquedaartista">Buscar Artista</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Recomendar
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/recomendarcancionusuario">Recomendar Canción por ID Usuario</a>
+            <a class="dropdown-item" href="/recomendarcancion">Recomendar Canciones Similares</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
   </header>
   <section>
     {% block contenido %}{% endblock %}
   </section>
   {% block pie %}{% endblock %} 
+  {% bootstrap_javascript jquery='full' %}
 </body>
 </html>

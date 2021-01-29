@@ -2,11 +2,8 @@
 
 {% extends 'base.html' %}
 
-{% block encabezado %}
-<h1> Canciones Explícitas del 1999 al 2020 </h1>
-{% endblock %}
-
   {% block contenido %}
+  <h1> Canciones Explícitas del 1999 al 2020 </h1>
 			{% for row in canciones %}
 			
 			    <dt><b>Nombre: </b>{{row.nombre}}</dt>
@@ -15,9 +12,9 @@
 				<dd><b>Escuchar en Spotify: </b><a href="https://open.spotify.com/track/{{row.id_spotify}}" target="_blank">Ir a Spotify</a></dd>
 				<dt> <b>Artistas: </b>
 			    {% for artista in row.artistas.all %}
-			    	<dd><a href="/artista/{{artista.nombre}}">{{artista.nombre}}</a></dd> 
+			    	<dd class="col-sm-3"><a href="/artista/{{artista.nombre}}">{{artista.nombre}}</a></dd> 
 			    {% endfor %}
 				</dt>	
-				<br/>	    
+				<hr class="mt-2 mb-3"/> 	    
 			{% endfor %}
   {% endblock %}
