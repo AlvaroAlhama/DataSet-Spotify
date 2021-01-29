@@ -90,7 +90,10 @@ def busquedaArtistaURL(request, nombre):
                 artista['url_twitter'] = results[0]['url_twitter']
             if 'url_instagram' in results[0].keys():
                 artista['url_instagram'] = results[0]['url_instagram']
-    return render(request, 'mostrar_artista.html', {'artista': artista, 'mensaje': mensaje})
+    a = Artista.objects.filter(nombre=nombre)
+    if len(artista)>0:
+        canciones = Cancion.objects.filter(artistas=a[0])
+    return render(request, 'mostrar_artista.html', {'artista': artista, 'canciones': canciones, 'mensaje': mensaje})
 
 def recomendacionUsuario(request):
     formulario = UsuarioBusquedaForm()
