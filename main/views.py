@@ -121,21 +121,24 @@ def recomendacionCancion(request):
     formulario = CancionBusquedaForm()
     items = None
     cancion = None
+    mensaje = None
     if request.method == 'POST':
         formulario = CancionBusquedaForm(request.POST)
         if formulario.is_valid():
             nombre = formulario.cleaned_data['nombre']
             cancion = nombre
-            idCancion = Cancion.objects.filter(nombre=nombre)[0].pk
-            shelf = shelve.open("dataRS.dat")
-            ItemsPrefs = shelf['ItemsPrefs']
-            shelf.close()
-            recommended = topMatches(ItemsPrefs, int(idCancion), n=3)
-            canciones = []
-            scores = []
-            for re in recommended:
-                canciones.append(Cancion.objects.get(pk=re[1]))
-                scores.append(re[0])
-            items= zip(canciones,scores)
-
-    return render(request,'canciones_recomendadas_cancion.html', {'formulario': formulario, 'items': items, 'cancion': cancion})
+            idCancion = Cancion.objects.filter(nombre=nombre)
+            if len(idCancion)>0:
+                shelf = shelve.open("dataRS.dat")
+                ItemsPrefs = shelf['ItemsPrefs']
+                shelf.close()
+                recommended = topMatches(ItemsPrefs, int(idCancion[0].pk), n=3)
+                canciones = []
+                scores = []
+                for re in recommended:
+                    canciones.append(Cancion.objects.get(pk=re[1]))
+                    scores.append(re[0])
+                items= zip(canciones,scores)
+            else:
+                mensaje = "El nombre de la canción introducida no existe en nuestra base de datos"
+    return render(request,'canciones_recomendadas_cancion.html', {'formulario': formulario, 'items': items, 'cancion': cancion, 'mensaje': mensaje})

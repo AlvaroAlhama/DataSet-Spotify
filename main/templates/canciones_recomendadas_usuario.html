@@ -2,7 +2,7 @@
 
 
   {% block contenido %}
-  <h1> Canciones Recomendadas para Usuario: {{idUsuario}} </h1>
+  <h1> Canciones Recomendadas para Usuario: {% if idUsuario %}{{idUsuario}}{% endif %} </h1>
 		{% if formulario %}
 			<form id="formulario" method="post" action=''>{% csrf_token %}
 				{{formulario}}

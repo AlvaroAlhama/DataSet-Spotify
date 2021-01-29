@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
   {% block contenido %}
-  <h1> Canciones Recomendadas: {{cancion}} </h1>
+  <h1> Canciones Recomendadas: {% if cancion %}{{cancion}}{% endif %} </h1>
+
+		{% if mensaje %}
+			{{mensaje}}
+		{% endif %}
+
 		{% if formulario %}
 			<form id="formulario" method="post" action=''>{% csrf_token %}
 				{{formulario}}
